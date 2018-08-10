@@ -1,15 +1,29 @@
+/*
+drop table if exists one;
+create table `one` (
+	`id` int(11) not null auto_increment,
+	`name` varchar(30) default "",
+	`version` int(11) not null,
+	`mtime` timestamp on update current_timestamp,
+	primary key(`id`),
+	key (`name`)
+)engine = InnoDB default charset = utf8;
+*/
 package main
 
 import (
 	"fmt"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 )
 
 type MsgTable struct {
-	Id          int     `xorm:"'id' INT(11) notnull pk autoincr"`
-        Name        string    `xorm:"'name' VARCHAR(30) default ''"`
+	Id          int       `xorm:"'id' INT(11) notnull pk autoincr"`
+        Name        string    `xorm:"'name' VARCHAR(30) default '' index"`
+	Version     int       `xorm:"'version' INT(11) notnull version"`
+	Mtime       time.Time `xorm:"'mtime' timestamp null default '0000-00-00 00:00:00' updated"`
 }
 
 
@@ -35,10 +49,12 @@ func main() {
 	if m.Name == "liuyangxi" {
 		m = &MsgTable{
 			Name : "wangfengfeng",
+			Version : m.Version,
 		}
 	} else {
 		m = &MsgTable{
 			Name : "liuyangxi",
+			Version : m.Version,
 	    	}
 	}
 	/*has, err := engine.Table("one").Exist(m)

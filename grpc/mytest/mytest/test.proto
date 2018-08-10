@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package mytest;
+
+service First {
+	rpc GetNum(Seed) returns(Reply){}
+}
+
+message Seed {
+	int32 seed = 1;
+}
+
+message Reply {
+	string reply = 1;
+}
